@@ -112,7 +112,7 @@ collectibles_group = pygame.sprite.Group()
 
 reachable_positions = find_reachable_positions(maze, 1, 1)
 
-for i in range(len(traits)):
+for i in range(len(traits)-1):
     if reachable_positions:
         x, y = random.choice(reachable_positions)
         reachable_positions.remove((x, y))
@@ -178,9 +178,7 @@ while running:
         trait_index += 1
 
         # If all traits are learned, exit the game
-        if trait_index == len(traits):
-            message = f"You've learned {traits[trait_index]}!"
-            display_message = True
+        if trait_index == len(traits)-1:
 
             message = "These are my standards of integrity!"
             display_message = True
