@@ -23,7 +23,7 @@ BLUE = (0, 0, 255)
 # Initialize sound (with error handling for web)
 try:
     coinsound = pygame.mixer.Sound('Maze/sounds/coin.wav')
-    pygame.mixer.music.load('Maze/sounds/home.mp3')
+    pygame.mixer.music.load('Maze/sounds/home.ogg')
     pygame.mixer.music.play(-1)
 except:
     coinsound = None
