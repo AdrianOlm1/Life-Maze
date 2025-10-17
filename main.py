@@ -2,6 +2,8 @@ import asyncio
 import pygame
 import random
 from collections import deque
+import sys
+import platform
 
 # Initialize pygame
 pygame.init()
@@ -20,14 +22,9 @@ BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-# Initialize sound (with error handling for web)
-try:
-    coinsound = pygame.mixer.Sound('Maze/sounds/coin.wav')
-    pygame.mixer.music.load('Maze/sounds/home.ogg')
-    pygame.mixer.music.play(-1)
-except:
-    coinsound = None
-    print("Sound files not available")
+# Sound will be initialized in the main async function
+coinsound = None
+music_loaded = False
 
 traits = ["compassion", "patience", "kindness", "courage", "empathy", "generosity", "friendship", "loyalty", "dedication", "intelligence"]
 random.shuffle(traits)  # Randomize traits so they appear differently each game
@@ -152,7 +149,15 @@ async def main():
     """
     Main async game loop for pygbag compatibility
     """
-    global trait_index
+    global trait_index, coinsound, music_loaded
+
+    # Initialize sound inside async function for web compatibility
+    try:
+        coinsound = pygame.mixer.Sound('Maze/sounds/coin.wav')
+        print("Coin sound loaded successfully")
+    except Exception as e:
+        print(f"Could not load coin sound: {e}")
+        coinsound = None
 
     running = True
     clock = pygame.time.Clock()
@@ -172,6 +177,16 @@ async def main():
             if event.type == pygame.KEYDOWN:
                 waiting_for_key = False
                 game_started = True
+
+                # Start music when user presses a key (required for web browsers)
+                if not music_loaded:
+                    try:
+                        pygame.mixer.music.load('Maze/sounds/home.ogg')
+                        pygame.mixer.music.play(-1)
+                        music_loaded = True
+                        print("Background music started")
+                    except Exception as e:
+                        print(f"Could not load background music: {e}")
 
         await asyncio.sleep(0)  # Yield control to browser
 
