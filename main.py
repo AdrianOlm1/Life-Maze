@@ -151,9 +151,12 @@ async def main():
     """
     global trait_index, coinsound, music_loaded
 
+    # Give browser time to initialize
+    await asyncio.sleep(0)
+
     # Initialize sound inside async function for web compatibility
     try:
-        coinsound = pygame.mixer.Sound('Maze/sounds/coin.wav')
+        coinsound = pygame.mixer.Sound('Maze/sounds/coin.ogg')
         print("Coin sound loaded successfully")
     except Exception as e:
         print(f"Could not load coin sound: {e}")
@@ -247,6 +250,5 @@ async def main():
 
     pygame.quit()
 
-# Run the async main function
-if __name__ == "__main__":
-    asyncio.run(main())
+# Pygbag-compatible entry point
+asyncio.run(main())
