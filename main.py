@@ -31,6 +31,7 @@ BLUE = (0, 0, 255)
 
 # Sound will be initialized in the main async function
 coinsound = None
+background_music = None
 music_loaded = False
 
 traits = ["compassion", "patience", "kindness", "courage", "empathy", "generosity", "friendship", "loyalty", "dedication", "intelligence"]
@@ -156,7 +157,7 @@ async def main():
     """
     Main async game loop for pygbag compatibility
     """
-    global trait_index, coinsound, music_loaded
+    global trait_index, coinsound, background_music, music_loaded
 
     # Give browser time to initialize
     await asyncio.sleep(0)
@@ -187,14 +188,16 @@ async def main():
                         coinsound = pygame.mixer.Sound('Maze/sounds/coin.ogg')
                         print("Coin sound loaded successfully")
 
-                        # Load and play background music
-                        pygame.mixer.music.load('Maze/sounds/home.ogg')
-                        pygame.mixer.music.play(-1)
+                        # Load and play background music as a Sound object (loops indefinitely)
+                        background_music = pygame.mixer.Sound('Maze/sounds/home.ogg')
+                        background_music.set_volume(0.5)  # Set volume (0.0 to 1.0)
+                        background_music.play(-1)  # -1 means loop forever
                         music_loaded = True
-                        print("Background music started")
+                        print("Background music Sound loaded and playing")
                     except Exception as e:
                         print(f"Could not load sounds: {e}")
                         coinsound = None
+                        background_music = None
 
         await asyncio.sleep(0)  # Yield control to browser
 
