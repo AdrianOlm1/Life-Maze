@@ -8,6 +8,13 @@ import platform
 # Initialize pygame
 pygame.init()
 
+# Explicitly initialize mixer for web compatibility
+try:
+    pygame.mixer.init()
+    print("Pygame mixer initialized successfully")
+except Exception as e:
+    print(f"Mixer initialization error: {e}")
+
 # Screen dimensions
 SCREEN_WIDTH = 1600
 SCREEN_HEIGHT = 800
@@ -154,14 +161,6 @@ async def main():
     # Give browser time to initialize
     await asyncio.sleep(0)
 
-    # Initialize sound inside async function for web compatibility
-    try:
-        coinsound = pygame.mixer.Sound('Maze/sounds/coin.ogg')
-        print("Coin sound loaded successfully")
-    except Exception as e:
-        print(f"Could not load coin sound: {e}")
-        coinsound = None
-
     running = True
     clock = pygame.time.Clock()
     display_message = False
@@ -181,15 +180,21 @@ async def main():
                 waiting_for_key = False
                 game_started = True
 
-                # Start music when user presses a key (required for web browsers)
+                # Initialize all sounds AFTER user interaction (required for web browsers)
                 if not music_loaded:
                     try:
+                        # Load coin sound
+                        coinsound = pygame.mixer.Sound('Maze/sounds/coin.ogg')
+                        print("Coin sound loaded successfully")
+
+                        # Load and play background music
                         pygame.mixer.music.load('Maze/sounds/home.ogg')
                         pygame.mixer.music.play(-1)
                         music_loaded = True
                         print("Background music started")
                     except Exception as e:
-                        print(f"Could not load background music: {e}")
+                        print(f"Could not load sounds: {e}")
+                        coinsound = None
 
         await asyncio.sleep(0)  # Yield control to browser
 
