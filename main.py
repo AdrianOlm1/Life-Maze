@@ -184,20 +184,25 @@ async def main():
                 # Initialize all sounds AFTER user interaction (required for web browsers)
                 if not music_loaded:
                     try:
-                        # Load coin sound
+                        # Load coin sound first
                         coinsound = pygame.mixer.Sound('Maze/sounds/coin.ogg')
-                        print("Coin sound loaded successfully")
-
-                        # Load and play background music as a Sound object (loops indefinitely)
-                        background_music = pygame.mixer.Sound('Maze/sounds/home.ogg')
-                        background_music.set_volume(0.5)  # Set volume (0.0 to 1.0)
-                        background_music.play(-1)  # -1 means loop forever
-                        music_loaded = True
-                        print("Background music Sound loaded and playing")
+                        print(f"Coin sound loaded: {coinsound is not None}")
                     except Exception as e:
-                        print(f"Could not load sounds: {e}")
+                        print(f"Coin sound error: {e}")
                         coinsound = None
-                        background_music = None
+
+                    # Try to load and play background music
+                    try:
+                        # Use music module for long audio files
+                        print("Loading background music...")
+                        pygame.mixer.music.load('Maze/sounds/home.ogg')
+                        pygame.mixer.music.set_volume(0.6)
+                        pygame.mixer.music.play(loops=-1)  # Loop forever
+                        music_loaded = True
+                        print(f"Background music playing: {pygame.mixer.music.get_busy()}")
+                    except Exception as e:
+                        print(f"Background music error: {e}")
+                        music_loaded = False
 
         await asyncio.sleep(0)  # Yield control to browser
 
