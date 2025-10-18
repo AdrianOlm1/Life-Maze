@@ -5,15 +5,8 @@ from collections import deque
 import sys
 import platform
 
-# Initialize pygame
+# Initialize pygame (same as Bubble Trouble - no custom mixer settings)
 pygame.init()
-
-# Explicitly initialize mixer for web compatibility with better quality settings
-try:
-    pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=2048)
-    print("Pygame mixer initialized successfully")
-except Exception as e:
-    print(f"Mixer initialization error: {e}")
 
 # Screen dimensions
 SCREEN_WIDTH = 1600
@@ -191,13 +184,13 @@ async def main():
                         print(f"Coin sound error: {e}")
                         coinsound = None
 
-                    # Try to load and play background music (use MP3 for better quality)
+                    # Try to load and play background music (use OGG like Bubble Trouble)
                     try:
                         # Use music module for long audio files
                         print("Loading background music...")
-                        pygame.mixer.music.load('Maze/sounds/home.mp3')
-                        pygame.mixer.music.set_volume(0.5)
-                        pygame.mixer.music.play(loops=-1)  # Loop forever
+                        pygame.mixer.music.load('Maze/sounds/home.ogg')
+                        pygame.mixer.music.set_volume(0.6)
+                        pygame.mixer.music.play(-1)  # Loop forever (same as Bubble Trouble)
                         music_loaded = True
                         print(f"Background music playing: {pygame.mixer.music.get_busy()}")
                     except Exception as e:
